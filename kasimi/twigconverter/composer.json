@@ -1,0 +1,26 @@
+{
+    "name": "kasimi/twigconverter",
+    "type": "phpbb-extension",
+    "description": "This extension converts phpBB template files to template files using Twig syntax.",
+    "homepage": "https://kasimi.net",
+    "version": "1.0.0",
+    "time": "2017-06-30",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "kasimi",
+            "email": "mail@kasimi.net",
+            "homepage": "https://kasimi.net",
+            "role": "Lead Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "extra": {
+        "display-name": "Twig Converter",
+        "soft-require": {
+            "phpbb/phpbb": ">=3.1.10"
+        }
+    }
+}
