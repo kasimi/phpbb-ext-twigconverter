@@ -13,6 +13,11 @@ namespace kasimi\twigconverter;
 
 class lexer extends \phpbb\template\twig\lexer
 {
+	public function __construct()
+	{
+		parent::__construct(new \Twig_Environment(new \Twig_Loader_Filesystem()));
+	}
+
 	/**
 	 * Code taken from https://github.com/phpbb/phpbb/blob/release-3.2.0/phpBB/phpbb/template/twig/lexer.php#L23
 	 *

@@ -140,7 +140,7 @@ class main
 		}
 
 		$converted_syntax = array();
-		$lexer = new lexer(new \Twig_Environment(new \Twig_Loader_Filesystem()));
+		$lexer = new lexer();
 
 		foreach (array_keys($template_files) as $template_file)
 		{
