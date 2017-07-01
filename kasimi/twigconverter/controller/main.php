@@ -46,7 +46,7 @@ class main
 	 * Constructor
 	 *
 	 * @param request_interface	$request
-	 * @param symfony_request	$symfony_request,
+	 * @param symfony_request	$symfony_request
 	 * @param template			$template
 	 * @param user				$user
 	 * @param manager			$ext_manager
@@ -75,7 +75,8 @@ class main
 	public function convert($u_action)
 	{
 		$this->user->add_lang_ext('kasimi/twigconverter', 'common');
-
+		$available_extensions = $this->available_extensions();
+		$available_styles = $this->available_styles();
 		add_form_key('kasimi/twigconverter');
 
 		if ($this->request->is_set_post('submit'))
@@ -85,20 +86,18 @@ class main
 				trigger_error('FORM_INVALID');
 			}
 
-			$ext_name = $this->request->variable('ext_name', '');
-			$ext_name = str_replace('.', '', $ext_name);
+			$name = $this->request->variable('name', '');
 
 			try
 			{
-				$template_contents = $this->convert_extension($ext_name);
-
-				$zip_directory = $this->root_path . 'store/';
-				$zip_filename = str_replace('/', '_', $ext_name) .  '_twig_templates.zip';
-
-				$this->make_zip($zip_directory, $zip_filename, $template_contents);
-				$this->download($zip_directory . $zip_filename);
-
-				exit_handler();
+				if (in_array($name, $available_extensions))
+				{
+					$this->run($name, $this->get_extension_template_files($name));
+				}
+				else if (in_array($name, $available_styles))
+				{
+					$this->run($name, $this->get_style_template_files($name));
+				}
 			}
 			catch (\Exception $e)
 			{
@@ -106,12 +105,17 @@ class main
 			}
 		}
 
-		$ext_names = array_keys($this->ext_manager->all_available());
-
-		foreach($ext_names as $ext_name)
+		foreach ($available_extensions as $ext_name)
 		{
 			$this->template->assign_block_vars('ext', array(
 				'NAME' => $ext_name,
+			));
+		}
+
+		foreach ($available_styles as $style_name)
+		{
+			$this->template->assign_block_vars('style', array(
+				'NAME' => $style_name,
 			));
 		}
 
@@ -119,34 +123,112 @@ class main
 	}
 
 	/**
-	 * @param string $ext_name The extension to convert, vendor/extname.
-	 * @return array An array mapping each template filename in the given extension to the contents of the converted template syntax.
+	 * @return array An array containing all available extension names.
 	 */
-	protected function convert_extension($ext_name)
+	protected function available_extensions()
 	{
-		$ext_path = $this->ext_manager->get_extension_path($ext_name, true);
+		return array_keys($this->ext_manager->all_available());
+	}
 
-		if (!$ext_name || !@is_dir($ext_path))
+	/**
+	 * @return array An array containing all available style names.
+	 */
+	protected function available_styles()
+	{
+		$styles = array();
+
+		$dp = @opendir($this->root_path . 'styles/');
+		if ($dp)
 		{
-			throw new http_exception(400, 'TWIGCONVERTER_ERROR_NO_EXT');
+			while (($file = readdir($dp)) !== false)
+			{
+				$dir = $this->root_path . 'styles/' . $file;
+				if ($file[0] == '.' || !is_dir($dir))
+				{
+					continue;
+				}
+
+				if (file_exists("{$dir}/style.cfg"))
+				{
+					$styles[] = $file;
+				}
+			}
+			closedir($dp);
 		}
 
-		$template_files = $this->ext_manager->get_finder()
-			->extension_suffix('.html')
-			->find_from_extension($ext_name, $ext_path);
+		sort($styles);
 
+		return $styles;
+	}
+
+	/**
+	 * @param string $ext_name The name of the extension.
+	 * @return array An array containing relative path names to all .html files for the given extension.
+	 */
+	protected function get_extension_template_files($ext_name)
+	{
+		$template_files = $this->ext_manager->get_finder(true)
+			->extension_suffix('.html')
+			->find_from_extension($ext_name, $this->ext_manager->get_extension_path($ext_name, true));
+
+		return array_keys($template_files);
+	}
+
+	/**
+	 * @param string $style_name The name of the style.
+	 * @return array An array containing relative path names to all .html files for the given style.
+	 */
+	protected function get_style_template_files($style_name)
+	{
+		$template_files = $this->ext_manager->get_finder(true)
+			->core_suffix('.html')
+			->find_from_paths(array('/' => $this->root_path . 'styles/' . $style_name));
+
+		$filenames = array();
+
+		foreach ($template_files as $template_file)
+		{
+			$filenames[] = 'styles/' . $style_name . '/' . $template_file['named_path'];
+		}
+
+		return $filenames;
+	}
+
+	/**
+	 * @param string $name The name of the extension or the style.
+	 * @param array $template_files An array of file names found within the extension or style directory.
+	 */
+	protected function run($name, array $template_files)
+	{
 		if (!$template_files)
 		{
 			throw new http_exception(400, 'TWIGCONVERTER_ERROR_NO_TEMPLATE_FILES');
 		}
 
+		$template_contents = $this->convert_files($template_files);
+
+		$zip_directory = $this->root_path . 'store/';
+		$zip_filename = str_replace('/', '_', $name) . '_twig_templates.zip';
+
+		$this->make_zip($zip_directory, $zip_filename, $template_contents);
+		$this->download($zip_directory . $zip_filename);
+
+		exit_handler();
+	}
+
+	/**
+	 * @param array $filenames An array containing file names to convert, without root path.
+	 * @return array An array mapping each file name from the $filenames array to the contents of the converted template syntax.
+	 */
+	protected function convert_files(array $filenames)
+	{
 		$converted_syntax = array();
 		$lexer = new lexer();
 
-		foreach (array_keys($template_files) as $template_file)
+		foreach ($filenames as $filename)
 		{
-			$contents = @file_get_contents($this->root_path . $template_file);
-			$converted_syntax[$template_file] = $lexer->convert($contents);
+			$contents = @file_get_contents($this->root_path . $filename);
+			$converted_syntax[$filename] = $lexer->convert($contents);
 		}
 
 		return $converted_syntax;

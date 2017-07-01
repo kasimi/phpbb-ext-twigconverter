@@ -6,11 +6,14 @@
 	<fieldset>
 		{% if ERROR %}<p class="error">{{ ERROR }}</p>{% endif %}
 		<dl>
-			<dt><label for="ext_name">{{ lang('TWIGCONVERTER_SELECT') }}{{ lang('COLON') }}</label><br><span>{{ lang('TWIGCONVERTER_SELECT_EXPLAIN') }}</span></dt>
-			<dd><select name="ext_name" id="ext_name">
+			<dt><label for="name">{{ lang('TWIGCONVERTER_SELECT') }}{{ lang('COLON') }}</label><br><span>{{ lang('TWIGCONVERTER_SELECT_EXPLAIN') }}</span></dt>
+			<dd><select name="name" id="name">
 				<option value="" selected disabled>{{ lang('TWIGCONVERTER_SELECT_EXT') }}</option>
 				{% for ext in loops.ext %}
-					<option value="{{ ext.NAME }}">{{ ext.NAME }}</option>
+					<option value="{{ ext.NAME }}">{{ lang('TWIGCONVERTER_EXT', ext.NAME) }}</option>
+				{% endfor %}
+				{% for style in loops.style %}
+					<option value="{{ style.NAME }}">{{ lang('TWIGCONVERTER_STYLE', style.NAME) }}</option>
 				{% endfor %}
 			</select></dd>
 		</dl>
