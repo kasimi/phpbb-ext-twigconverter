@@ -8,7 +8,7 @@
 		<dl>
 			<dt><label for="ext_name">{{ lang('TWIGCONVERTER_SELECT') }}{{ lang('COLON') }}</label><br><span>{{ lang('TWIGCONVERTER_SELECT_EXPLAIN') }}</span></dt>
 			<dd><select name="ext_name" id="ext_name">
-				<option value=""></option>
+				<option value="" selected disabled>{{ lang('TWIGCONVERTER_SELECT_EXT') }}</option>
 				{% for ext in loops.ext %}
 					<option value="{{ ext.NAME }}">{{ ext.NAME }}</option>
 				{% endfor %}

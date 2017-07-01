@@ -37,6 +37,7 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'TWIGCONVERTER_SELECT'						=> 'Convert template files',
 	'TWIGCONVERTER_SELECT_EXPLAIN'				=> 'Select an extension to convert its template files to Twig syntax. A zip file will be downloaded and also be saved to the board’s store directory.',
+	'TWIGCONVERTER_SELECT_EXT'					=> 'Select extension',
 
 	'TWIGCONVERTER_ERROR_NO_EXT'				=> 'Please select an extension.',
 	'TWIGCONVERTER_ERROR_NO_TEMPLATE_FILES'		=> 'The selected extension doesn’t have any template files.',
