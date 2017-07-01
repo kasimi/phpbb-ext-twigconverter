@@ -4,7 +4,7 @@
 
 Copy the extension to phpBB/ext/kasimi/twigconverter
 
-Go to "ACP" > "Customise" > "Extensions" and enable the "twigconverter" extension.
+Go to "ACP" > "Customise" > "Extensions" and enable the "Twig Converter" extension.
 
 ## License
 
