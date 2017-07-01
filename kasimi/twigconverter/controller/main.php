@@ -30,13 +30,13 @@ class main
 	/** @var symfony_request */
 	protected $symfony_request;
 
-	/* @var \phpbb\template\template */
+	/* @var template */
 	protected $template;
 
 	/* @var user */
 	protected $user;
 
-	/** @var  manager */
+	/** @var manager */
 	protected $ext_manager;
 
 	/** @var string */
@@ -86,6 +86,7 @@ class main
 			}
 
 			$ext_name = $this->request->variable('ext_name', '');
+			$ext_name = str_replace('.', '', $ext_name);
 
 			try
 			{
@@ -123,7 +124,7 @@ class main
 	 */
 	protected function convert_extension($ext_name)
 	{
-		$ext_path = $this->root_path . 'ext/' . $ext_name . '/';
+		$ext_path = $this->ext_manager->get_extension_path($ext_name, true);
 
 		if (!$ext_name || !@is_dir($ext_path))
 		{
