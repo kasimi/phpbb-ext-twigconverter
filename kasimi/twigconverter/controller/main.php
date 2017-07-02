@@ -211,7 +211,7 @@ class main
 		$zip_filename = str_replace('/', '_', $name) . '_twig_templates.zip';
 
 		$this->make_zip($zip_directory, $zip_filename, $template_contents);
-		$this->download($zip_directory . $zip_filename);
+		$this->download($zip_directory . $zip_filename, 'application/zip');
 
 		exit_handler();
 	}
@@ -268,11 +268,15 @@ class main
 
 	/**
 	 * @param string $filename
+	 * @param string $content_type
 	 * @return Response
 	 */
-	protected function download($filename)
+	protected function download($filename, $content_type)
 	{
-		return (new BinaryFileResponse($filename))
+		$response = new BinaryFileResponse($filename);
+		$response->headers->set('Content-Type', $content_type);
+
+		return $response
 			->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, basename($filename))
 			->prepare($this->symfony_request)
 			->send();
