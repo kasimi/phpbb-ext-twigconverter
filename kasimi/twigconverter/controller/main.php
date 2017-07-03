@@ -188,6 +188,12 @@ class main
 
 		foreach ($template_files as $template_file)
 		{
+			// phpBB expects bbcode.html to use phpBB syntax
+			if ($template_file['filename'] === 'bbcode.html')
+			{
+				continue;
+			}
+
 			$filenames[] = 'styles/' . $style_name . '/' . $template_file['named_path'];
 		}
 
