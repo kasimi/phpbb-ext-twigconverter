@@ -14,6 +14,7 @@ namespace kasimi\twigconverter\controller;
 use kasimi\twigconverter\lexer;
 use phpbb\exception\http_exception;
 use phpbb\extension\manager;
+use phpbb\filesystem\filesystem;
 use phpbb\request\request_interface;
 use phpbb\symfony_request;
 use phpbb\template\template;
@@ -39,6 +40,9 @@ class main
 	/** @var manager */
 	protected $ext_manager;
 
+	/** @var filesystem */
+	protected $filesystem;
+
 	/** @var string */
 	protected $root_path;
 
@@ -50,6 +54,7 @@ class main
 	 * @param template			$template
 	 * @param user				$user
 	 * @param manager			$ext_manager
+	 * @param filesystem		$filesystem
 	 * @param string			$root_path
 	 */
 	public function __construct(
@@ -58,6 +63,7 @@ class main
 		template $template,
 		user $user,
 		manager $ext_manager,
+		filesystem $filesystem,
 		$root_path
 	)
 	{
@@ -66,6 +72,7 @@ class main
 		$this->template			= $template;
 		$this->user				= $user;
 		$this->ext_manager		= $ext_manager;
+		$this->filesystem		= $filesystem;
 		$this->root_path		= $root_path;
 	}
 
@@ -247,7 +254,7 @@ class main
 	 */
 	protected function make_zip($zip_directory, $zip_filename, array $file_contents)
 	{
-		if (!phpbb_is_writable($zip_directory))
+		if (!$this->filesystem->is_writable($zip_directory))
 		{
 			throw new http_exception(400, 'TWIGCONVERTER_ERROR_WRITEABLE');
 		}

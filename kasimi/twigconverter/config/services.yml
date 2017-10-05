@@ -7,4 +7,5 @@ services:
             - '@template'
             - '@user'
             - '@ext.manager'
+            - '@filesystem'
             - '%core.root_path%'
