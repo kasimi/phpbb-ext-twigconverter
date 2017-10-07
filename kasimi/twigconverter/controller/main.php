@@ -88,8 +88,10 @@ class main
 	public function convert($u_action)
 	{
 		$this->user->add_lang_ext('kasimi/twigconverter', 'common');
+
 		$available_extensions = $this->available_extensions();
 		$available_styles = $this->available_styles();
+
 		add_form_key('kasimi/twigconverter');
 
 		if ($this->request->is_set_post('submit'))
@@ -120,16 +122,16 @@ class main
 
 		foreach ($available_extensions as $ext_name)
 		{
-			$this->template->assign_block_vars('ext', array(
+			$this->template->assign_block_vars('ext', [
 				'NAME' => $ext_name,
-			));
+			]);
 		}
 
 		foreach ($available_styles as $style_name)
 		{
-			$this->template->assign_block_vars('style', array(
+			$this->template->assign_block_vars('style', [
 				'NAME' => $style_name,
-			));
+			]);
 		}
 
 		$this->template->assign_var('U_ACTION', $u_action);
@@ -148,7 +150,7 @@ class main
 	 */
 	protected function available_styles()
 	{
-		$styles = array();
+		$styles = [];
 
 		$dp = @opendir($this->root_path . 'styles/');
 		if ($dp)
@@ -195,9 +197,9 @@ class main
 	{
 		$template_files = $this->ext_manager->get_finder(true)
 			->core_suffix('.html')
-			->find_from_paths(array('/' => $this->root_path . 'styles/' . $style_name));
+			->find_from_paths(['/' => $this->root_path . 'styles/' . $style_name]);
 
-		$filenames = array();
+		$filenames = [];
 
 		foreach ($template_files as $template_file)
 		{
@@ -241,7 +243,7 @@ class main
 	 */
 	protected function convert_files(array $filenames)
 	{
-		$converted_syntax = array();
+		$converted_syntax = [];
 
 		foreach ($filenames as $filename)
 		{
