@@ -6,7 +6,7 @@ services:
             - '@symfony_request'
             - '@template'
             - '@kasimi.twigconverter.lexer'
-            - '@user'
+            - '@language'
             - '@ext.manager'
             - '@filesystem'
             - '%core.root_path%'

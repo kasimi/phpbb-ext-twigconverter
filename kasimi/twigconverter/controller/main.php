@@ -15,10 +15,10 @@ use kasimi\twigconverter\lexer;
 use phpbb\exception\http_exception;
 use phpbb\extension\manager;
 use phpbb\filesystem\filesystem;
+use phpbb\language\language;
 use phpbb\request\request_interface;
 use phpbb\symfony_request;
 use phpbb\template\template;
-use phpbb\user;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -37,8 +37,8 @@ class main
 	/** @var lexer */
 	protected $lexer;
 
-	/* @var user */
-	protected $user;
+	/* @var language */
+	protected $language;
 
 	/** @var manager */
 	protected $ext_manager;
@@ -56,7 +56,7 @@ class main
 	 * @param symfony_request	$symfony_request
 	 * @param template			$template
 	 * @param lexer				$lexer
-	 * @param user				$user
+	 * @param language			$language
 	 * @param manager			$ext_manager
 	 * @param filesystem		$filesystem
 	 * @param string			$root_path
@@ -66,7 +66,7 @@ class main
 		symfony_request $symfony_request,
 		template $template,
 		lexer $lexer,
-		user $user,
+		language $language,
 		manager $ext_manager,
 		filesystem $filesystem,
 		$root_path
@@ -76,7 +76,7 @@ class main
 		$this->symfony_request	= $symfony_request;
 		$this->template			= $template;
 		$this->lexer			= $lexer;
-		$this->user				= $user;
+		$this->language			= $language;
 		$this->ext_manager		= $ext_manager;
 		$this->filesystem		= $filesystem;
 		$this->root_path		= $root_path;
@@ -87,7 +87,7 @@ class main
 	 */
 	public function convert($u_action)
 	{
-		$this->user->add_lang_ext('kasimi/twigconverter', 'common');
+		$this->language->add_lang('common', 'kasimi/twigconverter');
 
 		$available_extensions = $this->available_extensions();
 		$available_styles = $this->available_styles();
@@ -116,7 +116,7 @@ class main
 			}
 			catch (\Exception $e)
 			{
-				$this->template->assign_var('ERROR', $this->user->lang($e->getMessage()));
+				$this->template->assign_var('ERROR', $this->language->lang($e->getMessage()));
 			}
 		}
 
