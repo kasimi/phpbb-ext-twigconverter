@@ -34,6 +34,9 @@ class main
 	/* @var template */
 	protected $template;
 
+	/** @var lexer */
+	protected $lexer;
+
 	/* @var user */
 	protected $user;
 
@@ -52,6 +55,7 @@ class main
 	 * @param request_interface	$request
 	 * @param symfony_request	$symfony_request
 	 * @param template			$template
+	 * @param lexer				$lexer
 	 * @param user				$user
 	 * @param manager			$ext_manager
 	 * @param filesystem		$filesystem
@@ -61,6 +65,7 @@ class main
 		request_interface $request,
 		symfony_request $symfony_request,
 		template $template,
+		lexer $lexer,
 		user $user,
 		manager $ext_manager,
 		filesystem $filesystem,
@@ -70,6 +75,7 @@ class main
 		$this->request			= $request;
 		$this->symfony_request	= $symfony_request;
 		$this->template			= $template;
+		$this->lexer			= $lexer;
 		$this->user				= $user;
 		$this->ext_manager		= $ext_manager;
 		$this->filesystem		= $filesystem;
@@ -236,12 +242,12 @@ class main
 	protected function convert_files(array $filenames)
 	{
 		$converted_syntax = array();
-		$lexer = new lexer();
 
 		foreach ($filenames as $filename)
 		{
 			$contents = @file_get_contents($this->root_path . $filename);
-			$converted_syntax[$filename] = $lexer->convert($contents);
+			$this->lexer->tokenize($contents, $filename);
+			$converted_syntax[$filename] = $this->lexer->get_code();
 		}
 
 		return $converted_syntax;

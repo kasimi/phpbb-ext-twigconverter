@@ -5,7 +5,12 @@ services:
             - '@request'
             - '@symfony_request'
             - '@template'
+            - '@kasimi.twigconverter.lexer'
             - '@user'
             - '@ext.manager'
             - '@filesystem'
             - '%core.root_path%'
+
+    kasimi.twigconverter.lexer:
+        class: kasimi\twigconverter\lexer
+        parent: 'template.twig.lexer'
