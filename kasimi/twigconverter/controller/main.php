@@ -49,6 +49,9 @@ class main
 	/** @var string */
 	protected $root_path;
 
+	/** @var string */
+	protected $ext_name;
+
 	/**
 	 * Constructor
 	 *
@@ -60,6 +63,7 @@ class main
 	 * @param manager			$ext_manager
 	 * @param filesystem		$filesystem
 	 * @param string			$root_path
+	 * @param string			$ext_name
 	 */
 	public function __construct(
 		request_interface $request,
@@ -69,7 +73,8 @@ class main
 		language $language,
 		manager $ext_manager,
 		filesystem $filesystem,
-		$root_path
+		$root_path,
+		$ext_name
 	)
 	{
 		$this->request			= $request;
@@ -80,6 +85,7 @@ class main
 		$this->ext_manager		= $ext_manager;
 		$this->filesystem		= $filesystem;
 		$this->root_path		= $root_path;
+		$this->ext_name			= $ext_name;
 	}
 
 	/**
@@ -87,16 +93,16 @@ class main
 	 */
 	public function convert($u_action)
 	{
-		$this->language->add_lang('common', 'kasimi/twigconverter');
+		$this->language->add_lang('common', $this->ext_name);
 
 		$available_extensions = $this->available_extensions();
 		$available_styles = $this->available_styles();
 
-		add_form_key('kasimi/twigconverter');
+		add_form_key($this->ext_name);
 
 		if ($this->request->is_set_post('submit'))
 		{
-			if (!check_form_key('kasimi/twigconverter'))
+			if (!check_form_key($this->ext_name))
 			{
 				trigger_error('FORM_INVALID');
 			}

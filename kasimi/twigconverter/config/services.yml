@@ -10,6 +10,7 @@ services:
             - '@ext.manager'
             - '@filesystem'
             - '%core.root_path%'
+            - 'kasimi/twigconverter'
 
     kasimi.twigconverter.lexer:
         class: kasimi\twigconverter\lexer
