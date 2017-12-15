@@ -188,11 +188,21 @@ class main
 	 */
 	protected function get_extension_template_files($ext_name)
 	{
-		$template_files = $this->ext_manager->get_finder(true)
+		$finder = $this->ext_manager->get_finder(true);
+
+		$template_files = $finder
 			->extension_suffix('.html')
 			->find_from_extension($ext_name, $this->ext_manager->get_extension_path($ext_name, true));
 
-		return array_keys($template_files);
+		$email_files = $finder
+			->extension_directory('email/')
+			->extension_suffix('.txt')
+			->find_from_extension($ext_name, $this->ext_manager->get_extension_path($ext_name, true));
+
+		return array_merge(
+			array_keys($template_files),
+			array_keys($email_files)
+		);
 	}
 
 	/**
