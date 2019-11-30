@@ -11,7 +11,6 @@
 
 namespace kasimi\twigconverter\controller;
 
-use kasimi\twigconverter\lexer;
 use phpbb\exception\http_exception;
 use phpbb\extension\manager;
 use phpbb\filesystem\filesystem;
@@ -22,6 +21,7 @@ use phpbb\template\template;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Twig\Lexer;
 
 class main
 {
@@ -34,7 +34,7 @@ class main
 	/* @var template */
 	protected $template;
 
-	/** @var lexer */
+	/** @var Lexer */
 	protected $lexer;
 
 	/* @var language */
@@ -58,7 +58,7 @@ class main
 	 * @param request_interface	$request
 	 * @param symfony_request	$symfony_request
 	 * @param template			$template
-	 * @param lexer				$lexer
+	 * @param Lexer				$lexer
 	 * @param language			$language
 	 * @param manager			$ext_manager
 	 * @param filesystem		$filesystem
@@ -69,7 +69,7 @@ class main
 		request_interface $request,
 		symfony_request $symfony_request,
 		template $template,
-		lexer $lexer,
+		Lexer $lexer,
 		language $language,
 		manager $ext_manager,
 		filesystem $filesystem,
@@ -264,8 +264,17 @@ class main
 		foreach ($filenames as $filename)
 		{
 			$contents = @file_get_contents($this->root_path . $filename);
-			$this->lexer->tokenize($contents, $filename);
-			$converted_syntax[$filename] = $this->lexer->get_code();
+
+			if (phpbb_version_compare(PHPBB_VERSION, '3.3.0@dev', '<'))
+			{
+				$source = $this->lexer->tokenize($contents, $filename)->getSourceContext();
+			}
+			else
+			{
+				$source = $this->lexer->tokenize(new \Twig_Source($contents, $filename))->getSourceContext();
+			}
+
+			$converted_syntax[$filename] = $source->getCode();
 		}
 
 		return $converted_syntax;
