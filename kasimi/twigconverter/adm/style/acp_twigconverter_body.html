@@ -6,7 +6,7 @@
 	<fieldset>
 		{% if ERROR %}<p class="error">{{ ERROR }}</p>{% endif %}
 		<dl>
-			<dt><label for="name">{{ lang('TWIGCONVERTER_SELECT') }}{{ lang('COLON') }}</label><br><span>{{ lang('TWIGCONVERTER_SELECT_EXPLAIN') }}</span></dt>
+			<dt><label for="name">{{ lang('TWIGCONVERTER_SELECT') ~ lang('COLON') }}</label><br><span>{{ lang('TWIGCONVERTER_SELECT_EXPLAIN') }}</span></dt>
 			<dd><select name="name" id="name">
 				<option value="" selected disabled>{{ lang('TWIGCONVERTER_SELECT_EXT') }}</option>
 				{% for ext in loops.ext %}
@@ -19,7 +19,7 @@
 		</dl>
 
 		<p class="submit-buttons">
-			<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}" />&nbsp;
+			<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}">
 		</p>
 
 		{{ S_FORM_TOKEN }}

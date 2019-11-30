@@ -21,6 +21,7 @@ use phpbb\template\template;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Twig\Error\SyntaxError;
 use Twig\Lexer;
 
 class main
@@ -238,6 +239,7 @@ class main
 	/**
 	 * @param string $name The name of the extension or the style.
 	 * @param array $template_files An array of file names found within the extension or style directory.
+	 * @throws SyntaxError
 	 */
 	protected function run($name, array $template_files)
 	{
@@ -260,6 +262,7 @@ class main
 	/**
 	 * @param array $filenames An array containing file names to convert, without root path.
 	 * @return array An array mapping each file name from the $filenames array to the contents of the converted template syntax.
+	 * @throws SyntaxError
 	 */
 	protected function convert_files(array $filenames)
 	{

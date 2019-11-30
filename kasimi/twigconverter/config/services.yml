@@ -1,6 +1,6 @@
 services:
     kasimi.twigconverter.controller:
-        class: kasimi\twigconverter\controller\main
+        class: 'kasimi\twigconverter\controller\main'
         arguments:
             - '@request'
             - '@symfony_request'
