@@ -120,6 +120,10 @@ class main
 					$this->run($name, $this->get_style_template_files($name));
 				}
 			}
+			catch (http_exception $e)
+			{
+				$this->template->assign_var('ERROR', $this->language->lang_array($e->getMessage(), $e->get_parameters()));
+			}
 			catch (\Exception $e)
 			{
 				$this->template->assign_var('ERROR', $this->language->lang($e->getMessage()));
@@ -294,9 +298,11 @@ class main
 
 		$zip = new \ZipArchive();
 
-		if (true !== $zip->open($zip_directory . $zip_filename, \ZipArchive::CREATE | \ZipArchive::OVERWRITE))
+		$error_code = $zip->open($zip_directory . $zip_filename, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+
+		if (true !== $error_code)
 		{
-			throw new http_exception(400, 'TWIGCONVERTER_ERROR_ZIP');
+			throw new http_exception(400, 'TWIGCONVERTER_ERROR_ZIP', [$error_code]);
 		}
 
 		try

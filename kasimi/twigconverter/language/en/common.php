@@ -43,5 +43,5 @@ $lang = array_merge($lang, [
 
 	'TWIGCONVERTER_ERROR_NO_TEMPLATE_FILES'		=> 'The selected directory doesn’t contain any template files.',
 	'TWIGCONVERTER_ERROR_WRITEABLE'				=> 'The destination directory isn’t writeable.',
-	'TWIGCONVERTER_ERROR_ZIP'					=> 'Failed to create zip file.',
+	'TWIGCONVERTER_ERROR_ZIP'					=> 'Failed to create zip file. Error code: %d',
 ]);
