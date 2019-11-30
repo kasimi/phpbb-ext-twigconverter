@@ -11,24 +11,26 @@
 
 namespace kasimi\twigconverter\migrations;
 
-class install_acp_module extends \phpbb\db\migration\migration
+use phpbb\db\migration\migration;
+
+class install_acp_module extends migration
 {
 	public function update_data()
 	{
-		return array(
-			array('module.add', array(
+		return [
+			['module.add', [
 				'acp',
 				'ACP_CAT_DOT_MODS',
 				'ACP_TWIGCONVERTER_TITLE'
-			)),
-			array('module.add', array(
+			]],
+			['module.add', [
 				'acp',
 				'ACP_TWIGCONVERTER_TITLE',
-				array(
+				[
 					'module_basename'	=> '\kasimi\twigconverter\acp\main_module',
-					'modes'				=> array('convert'),
-				),
-			)),
-		);
+					'modes'				=> ['convert'],
+				],
+			]],
+		];
 	}
 }

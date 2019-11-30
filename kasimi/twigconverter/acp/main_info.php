@@ -15,16 +15,16 @@ class main_info
 {
 	public function module()
 	{
-		return array(
+		return [
 			'filename'	=> '\kasimi\twigconverter\acp\main_module',
 			'title'		=> 'ACP_TWIGCONVERTER_TITLE',
-			'modes'		=> array(
-				'convert'	=> array(
+			'modes'		=> [
+				'convert'	=> [
 					'title'		=> 'ACP_TWIGCONVERTER_CONVERT',
 					'auth'		=> 'ext_kasimi/twigconverter && acl_a_board',
-					'cat'		=> array('ACP_TWIGCONVERTER_TITLE'),
-				),
-			),
-		);
+					'cat'		=> ['ACP_TWIGCONVERTER_TITLE'],
+				],
+			],
+		];
 	}
 }
