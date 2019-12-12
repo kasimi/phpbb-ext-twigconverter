@@ -19,7 +19,7 @@
 		</dl>
 
 		<p class="submit-buttons">
-			<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}">
+			<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}" onclick="document.querySelector('.error').remove();">
 		</p>
 
 		{{ S_FORM_TOKEN }}
